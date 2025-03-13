@@ -11,7 +11,7 @@ export const rentalQuiz: QuizData = {
       options: [
         { id: "1", text: "1", points: 1 },
         { id: "2", text: "2", points: 2 },
-        { id: "3", text: "3 lub więcej", points: 3 },
+        { id: "3", text: "3 lub więcej", points: 4 },
       ],
     },
     {
@@ -19,10 +19,10 @@ export const rentalQuiz: QuizData = {
       question: "Gdzie znajduje się Twoja nieruchomość?",
       category: "Informacje o nieruchomości",
       options: [
-        { id: "seaside", text: "Nad morzem", points: 3 },
-        { id: "mountains", text: "W górach", points: 3 },
+        { id: "seaside", text: "Nad morzem", points: 2 },
+        { id: "mountains", text: "W górach", points: 2 },
         { id: "city", text: "W dużym mieście", points: 2 },
-        { id: "other", text: "Inne", points: 1 },
+        { id: "other", text: "Inne", points: 2 },
       ],
     },
     {
@@ -40,8 +40,8 @@ export const rentalQuiz: QuizData = {
       question: "Jakie udogodnienia posiada Twój apartament?",
       category: "Informacje o nieruchomości",
       options: [
-        { id: "basic", text: "Podstawowe wyposażenie", points: 1 },
-        { id: "standard", text: "Standardowe wyposażenie z Wi-Fi", points: 2 },
+        { id: "standard", text: "Podstawowe wyposażenie", points: 1 },
+        { id: "standard_plus", text: "Podwyższony standard", points: 2 },
         {
           id: "premium",
           text: "Premium (np. jacuzzi, sauna, klimatyzacja)",
@@ -55,9 +55,9 @@ export const rentalQuiz: QuizData = {
       question: "Czy zarządzasz wynajmem swojego apartamentu?",
       category: "Zarządzanie i poświęcany czas",
       options: [
-        { id: "self_managed", text: "Tak, samodzielnie", points: 2 },
+        { id: "self_managed", text: "Tak, samodzielnie", points: 3 },
         { id: "partial", text: "Częściowo (korzystam z pomocy)", points: 1 },
-        { id: "company", text: "Korzystam z firmy zarządzającej", points: 3 },
+        { id: "company", text: "Korzystam z firmy zarządzającej", points: 2 },
         { id: "none", text: "Nie, nie wynajmuję go obecnie", points: 0 },
       ],
     },
@@ -69,7 +69,6 @@ export const rentalQuiz: QuizData = {
         { id: "less_than_2", text: "Mniej niż 2 godziny", points: 3 },
         { id: "3_to_5", text: "3-5 godzin", points: 2 },
         { id: "more_than_6", text: "Powyżej 6 godzin", points: 1 },
-        { id: "none", text: "Nie zarządzam wynajmem", points: 0 },
       ],
     },
     {
@@ -91,7 +90,6 @@ export const rentalQuiz: QuizData = {
         { id: "guest_needs", text: "Reagowanie na potrzeby gości", points: 1 },
         { id: "profits", text: "Zwiększenie zysków", points: 3 },
         { id: "marketing", text: "Marketing i promocja obiektu", points: 3 },
-        { id: "none", text: "Nie zarządzam wynajmem", points: 0 },
       ],
     },
     {
@@ -114,7 +112,6 @@ export const rentalQuiz: QuizData = {
           text: "Nie, trzymam stałą cenę przez cały rok",
           points: 1,
         },
-        { id: "none", text: "Nie zarządzam wynajmem", points: 0 },
       ],
     },
     {
@@ -125,7 +122,6 @@ export const rentalQuiz: QuizData = {
         { id: "multiple", text: "Tak, kilka razy", points: 1 },
         { id: "once_twice", text: "Raz lub dwa", points: 2 },
         { id: "never", text: "Nie, mam same pozytywne opinie", points: 3 },
-        { id: "none", text: "Nie zarządzam wynajmem", points: 0 },
       ],
     },
     {
@@ -137,7 +133,6 @@ export const rentalQuiz: QuizData = {
         { id: "7_5_to_8_5", text: "7.5-8.5", points: 2 },
         { id: "8_5_to_9_5", text: "8.5-9.5", points: 3 },
         { id: "above_9_5", text: "Powyżej 9.5", points: 4 },
-        { id: "none", text: "Nie zarządzam wynajmem", points: 0 },
       ],
     },
   ],
@@ -150,52 +145,52 @@ export const rentalQuiz: QuizData = {
       description:
         "Posiadasz nieruchomość, ale obecnie jej nie wynajmujesz. Istnieje ogromny potencjał do generowania dodatkowego dochodu z Twojej nieruchomości bez znacznego nakładu pracy.",
       recommendations: [
-        "Rozważ rozpoczęcie wynajmu krótkoterminowego, który może przynieść znacznie wyższe zyski niż wynajem długoterminowy",
-        "Skorzystaj z usług profesjonalnej firmy zarządzającej, aby zminimalizować swoje zaangażowanie czasowe",
-        "Przeanalizuj potencjał zarobkowy Twojej nieruchomości w oparciu o jej lokalizację i wielkość",
-        "Zapoznaj się z podstawowymi wymogami prawnymi i podatkowymi dotyczącymi wynajmu krótkoterminowego",
+        "Odkryj ukryty potencjał swojej nieruchomości - nasi eksperci pomogą Ci oszacować możliwe przychody",
+        "Poznaj sprawdzone strategie rozpoczęcia wynajmu bez stresu i nadmiernego zaangażowania czasowego",
+        "Dowiedz się, jak uniknąć typowych pułapek i błędów początkujących właścicieli nieruchomości",
+        "Skontaktuj się z nami, aby otrzymać indywidualny plan działania dostosowany do Twojej sytuacji",
       ],
     },
     {
       id: "beginner",
       title: "Początkujący Gospodarz",
       minScore: 0,
-      maxScore: 24,
+      maxScore: 19,
       description:
         "Dopiero zaczynasz swoją przygodę z wynajmem krótkoterminowym. Masz przed sobą wiele możliwości optymalizacji i zwiększenia zysków bez dodatkowej pracy.",
       recommendations: [
-        "Zautomatyzuj proces zameldowania gości",
-        "Wprowadź dynamiczne ceny w zależności od sezonu",
-        "Skorzystaj z narzędzi do zarządzania rezerwacjami",
-        "Popraw jakość zdjęć i opisu swojej oferty",
+        "Istnieją zaawansowane metody automatyzacji, które mogą uwolnić Twój czas - porozmawiaj z naszymi ekspertami",
+        "Twoja oferta może przyciągać więcej gości dzięki specjalistycznym technikom prezentacji - skontaktuj się, aby dowiedzieć się więcej",
+        "Nasi specjaliści mogą pomóc Ci wdrożyć system zarządzania, który zwiększy Twoje zyski o 20-40%",
+        "Umów się na bezpłatną konsultację, aby odkryć niewykorzystany potencjał Twojej nieruchomości",
       ],
     },
     {
       id: "intermediate",
       title: "Doświadczony Wynajmujący",
-      minScore: 25,
-      maxScore: 35,
+      minScore: 20,
+      maxScore: 29,
       description:
         "Masz już spore doświadczenie w zarządzaniu wynajmem. Wdrożyłeś kilka dobrych praktyk, ale wciąż jest przestrzeń do optymalizacji i zwiększenia zysków.",
       recommendations: [
-        "Zoptymalizuj strategię cenową z wykorzystaniem narzędzi analitycznych",
-        "Rozważ automatyzację komunikacji z gośćmi",
-        "Wprowadź dodatkowe usługi zwiększające wartość pobytu",
-        "Analizuj dane o obłożeniu i dostosuj swoją strategię marketingową",
+        "Istnieją zaawansowane strategie cenowe, które mogą znacząco zwiększyć Twój przychód - skontaktuj się, aby poznać szczegóły",
+        "Nasi eksperci mogą pokazać Ci, jak zautomatyzować najbardziej czasochłonne aspekty zarządzania wynajmem",
+        "Poznaj ekskluzywne metody zwiększania wartości pobytu, które stosują najlepsi hotelarze na świecie",
+        "Umów się na indywidualną konsultację, aby otrzymać spersonalizowaną strategię rozwoju Twojego biznesu",
       ],
     },
     {
       id: "expert",
       title: "Ekspert Wynajmu",
-      minScore: 36,
+      minScore: 30,
       maxScore: 100,
       description:
         "Jesteś profesjonalistą w zarządzaniu wynajmem krótkoterminowym. Twoje podejście jest zoptymalizowane i efektywne, ale zawsze można osiągnąć jeszcze więcej.",
       recommendations: [
-        "Rozważ skalowanie swojego biznesu o kolejne nieruchomości",
-        "Wdrażaj najnowsze technologie smart home dla jeszcze lepszego doświadczenia gości",
-        "Buduj lojalność gości poprzez programy lojalnościowe",
-        "Optymalizuj koszty operacyjne poprzez analizę wydatków",
+        "Poznaj zaawansowane strategie skalowania, które pozwolą Ci rozwinąć biznes bez proporcjonalnego zwiększania nakładu pracy",
+        "Dowiedz się, jak najlepsi w branży wykorzystują najnowsze technologie do maksymalizacji zysków",
+        "Nasi eksperci mogą pomóc Ci wdrożyć ekskluzywne rozwiązania dostępne tylko dla najlepszych w branży",
+        "Skontaktuj się z nami, aby omówić indywidualną strategię rozwoju i optymalizacji Twojego portfolio nieruchomości",
       ],
     },
   ],
