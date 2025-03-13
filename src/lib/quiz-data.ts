@@ -123,15 +123,5 @@ export const rentalQuiz: QuizData = {
         { id: "above_9_5", text: "Powyżej 9.5" },
       ],
     },
-    {
-      id: "optimization_interest",
-      question:
-        "Chcesz zobaczyć, jak możemy pomóc Ci zarządzać wynajmem i zwiększyć Twoje zyski bez dodatkowej pracy?",
-      category: "Generowanie leadów",
-      options: [
-        { id: "yes", text: "Tak, chcę poznać szczegóły i oszczędzić czas" },
-        { id: "no", text: "Nie, wolę zajmować się tym sam" },
-      ],
-    },
   ],
 };

@@ -35,31 +35,89 @@ export async function POST(request: Request) {
     }
 
     try {
-      // Try to use Prisma first
-      const lead = await prisma.lead.create({
-        data: {
-          name,
-          email,
-          phone,
-          quizId,
-          score,
-          // Create answers if provided
-          ...(answers && answers.length > 0
-            ? {
-                answers: {
-                  create: answers.map(
-                    (answer: { questionId: string; optionId: string }) => ({
-                      questionId: answer.questionId,
-                      optionId: answer.optionId,
-                    })
-                  ),
-                },
-              }
-            : {}),
-        },
+      // Check if the quiz exists, if not create it
+      const quiz = await prisma.quiz.findUnique({
+        where: { id: quizId },
       });
 
-      return NextResponse.json({ success: true, lead }, { status: 201 });
+      if (!quiz) {
+        // Create a default user if none exists
+        let user = await prisma.user.findFirst();
+
+        if (!user) {
+          user = await prisma.user.create({
+            data: {
+              email: "admin@example.com",
+              name: "Admin User",
+              role: "USER",
+            },
+          });
+        }
+
+        // Create the quiz
+        await prisma.quiz.create({
+          data: {
+            id: quizId,
+            slug: quizId,
+            title:
+              quizId === "rental-optimization"
+                ? "Optymalizacja Wynajmu"
+                : quizId,
+            description: "Quiz created automatically",
+            published: true,
+            userId: user.id,
+          },
+        });
+      }
+
+      // Try to use Prisma to create the lead and answers
+      try {
+        // First create the lead
+        const lead = await prisma.lead.create({
+          data: {
+            name,
+            email,
+            phone,
+            quizId,
+            score,
+          },
+        });
+
+        // Then create the answers if provided
+        if (answers && answers.length > 0) {
+          // Create answers one by one to handle potential errors
+          for (const answer of answers) {
+            try {
+              await prisma.answer.create({
+                data: {
+                  leadId: lead.id,
+                  questionId: answer.questionId,
+                  optionId: answer.optionId,
+                },
+              });
+            } catch (answerError) {
+              console.error(`Error creating answer: ${answerError}`);
+              // Continue with other answers even if one fails
+            }
+          }
+        }
+
+        // Fetch the lead with its answers
+        const leadWithAnswers = await prisma.lead.findUnique({
+          where: { id: lead.id },
+          include: {
+            answers: true,
+          },
+        });
+
+        return NextResponse.json(
+          { success: true, lead: leadWithAnswers },
+          { status: 201 }
+        );
+      } catch (createError) {
+        console.error("Error creating lead or answers:", createError);
+        throw createError; // Re-throw to be caught by the outer try-catch
+      }
     } catch (dbError) {
       console.error("Database error, using in-memory storage:", dbError);
 
@@ -104,27 +162,31 @@ export async function GET(request: Request) {
             where: { quizId },
             orderBy: { createdAt: "desc" },
             include: {
-              answers: {
-                include: {
-                  question: true,
-                  option: true,
-                },
-              },
+              answers: true,
             },
           })
         : await prisma.lead.findMany({
             orderBy: { createdAt: "desc" },
             include: {
-              answers: {
-                include: {
-                  question: true,
-                  option: true,
-                },
-              },
+              answers: true,
             },
           });
 
-      return NextResponse.json(leads);
+      // Format the leads to match the expected structure
+      const formattedLeads = leads.map((lead) => {
+        // Convert the answers array to the expected format
+        const answersRecord = lead.answers.reduce((acc, answer) => {
+          acc[answer.questionId] = answer.optionId;
+          return acc;
+        }, {} as Record<string, string>);
+
+        return {
+          ...lead,
+          answers: answersRecord,
+        };
+      });
+
+      return NextResponse.json(formattedLeads);
     } catch (dbError) {
       console.error("Database error, using in-memory storage:", dbError);
 

@@ -128,9 +128,16 @@ export async function getLeads(): Promise<Lead[]> {
     const formattedApiLeads: Lead[] = apiLeads.map((apiLead) => {
       // Convert the array of answers to a Record
       const answersRecord: Record<string, string> = {};
-      apiLead.answers.forEach((answer) => {
-        answersRecord[answer.questionId] = answer.optionId;
-      });
+
+      // Check if answers is an array before using forEach
+      if (Array.isArray(apiLead.answers)) {
+        apiLead.answers.forEach((answer) => {
+          answersRecord[answer.questionId] = answer.optionId;
+        });
+      } else if (apiLead.answers && typeof apiLead.answers === "object") {
+        // If answers is already an object/record, use it directly
+        Object.assign(answersRecord, apiLead.answers);
+      }
 
       return {
         id: apiLead.id,
