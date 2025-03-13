@@ -4,35 +4,63 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { useRouter } from "next/navigation";
 import { LeadFormData } from "@/lib/types";
 
 interface LeadFormProps {
   onSubmit: (data: LeadFormData) => void;
-  quizId: string;
+  quizId?: string;
 }
 
 export function LeadForm({ onSubmit, quizId }: LeadFormProps) {
-  const router = useRouter();
   const [formData, setFormData] = useState<LeadFormData>({
     name: "",
     email: "",
     phone: "",
   });
+  const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const validateForm = (): boolean => {
+    const newErrors: Record<string, string> = {};
+
+    if (!formData.name.trim()) {
+      newErrors.name = "Imię jest wymagane";
+    }
+
+    if (!formData.email.trim()) {
+      newErrors.email = "Email jest wymagany";
+    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      newErrors.email = "Niepoprawny format adresu email";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsSubmitting(true);
 
-    try {
-      await onSubmit(formData);
-      router.push(`/quiz/${quizId}/thank-you`);
-    } catch (error) {
-      console.error("Error submitting lead:", error);
-      alert("Wystąpił błąd podczas zapisywania danych. Spróbuj ponownie.");
-    } finally {
-      setIsSubmitting(false);
+    if (validateForm()) {
+      setIsSubmitting(true);
+      try {
+        await onSubmit({
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone,
+          quizId: quizId,
+        });
+      } catch (error) {
+        console.error("Error submitting form:", error);
+      } finally {
+        setIsSubmitting(false);
+      }
     }
   };
 
@@ -51,11 +79,15 @@ export function LeadForm({ onSubmit, quizId }: LeadFormProps) {
               placeholder="Imię i nazwisko"
               name="name"
               value={formData.name}
-              onChange={(e) =>
-                setFormData({ ...formData, name: e.target.value })
-              }
+              onChange={handleChange}
               required
+              className={`w-full p-3 border rounded-md ${
+                errors.name ? "border-red-500" : "border-gray-300"
+              }`}
             />
+            {errors.name && (
+              <p className="mt-1 text-sm text-red-500">{errors.name}</p>
+            )}
           </div>
           <div>
             <Input
@@ -63,11 +95,15 @@ export function LeadForm({ onSubmit, quizId }: LeadFormProps) {
               name="email"
               placeholder="Adres email"
               value={formData.email}
-              onChange={(e) =>
-                setFormData({ ...formData, email: e.target.value })
-              }
+              onChange={handleChange}
               required
+              className={`w-full p-3 border rounded-md ${
+                errors.email ? "border-red-500" : "border-gray-300"
+              }`}
             />
+            {errors.email && (
+              <p className="mt-1 text-sm text-red-500">{errors.email}</p>
+            )}
           </div>
           <div>
             <Input
@@ -75,9 +111,8 @@ export function LeadForm({ onSubmit, quizId }: LeadFormProps) {
               name="phone"
               placeholder="Numer telefonu (opcjonalnie)"
               value={formData.phone}
-              onChange={(e) =>
-                setFormData({ ...formData, phone: e.target.value })
-              }
+              onChange={handleChange}
+              className="w-full p-3 border border-gray-300 rounded-md"
             />
           </div>
           <Button type="submit" className="w-full" disabled={isSubmitting}>

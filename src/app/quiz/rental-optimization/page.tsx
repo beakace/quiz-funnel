@@ -31,8 +31,8 @@ export default function QuizPage() {
 
   const handleLeadSubmit = async (data: LeadFormData) => {
     try {
-      // Save lead data
-      saveLead(data, answers);
+      // Save lead data with the quiz ID
+      await saveLead(data, answers, "rental-optimization");
 
       // Redirect to thank you page
       router.push("/quiz/rental-optimization/thank-you");

@@ -21,9 +21,22 @@ import { rentalQuiz } from "@/lib/quiz-data";
 
 export default function LeadsPage() {
   const [leads, setLeads] = useState<Lead[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    setLeads(getLeads());
+    async function fetchLeads() {
+      try {
+        setIsLoading(true);
+        const fetchedLeads = await getLeads();
+        setLeads(fetchedLeads);
+      } catch (error) {
+        console.error("Error fetching leads:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+
+    fetchLeads();
   }, []);
 
   function formatDate(dateString: string) {
@@ -48,7 +61,9 @@ export default function LeadsPage() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          {leads.length === 0 ? (
+          {isLoading ? (
+            <p className="text-center py-8 text-gray-500">Ładowanie...</p>
+          ) : leads.length === 0 ? (
             <p className="text-center py-8 text-gray-500">
               Brak zebranych leadów
             </p>
@@ -60,16 +75,18 @@ export default function LeadsPage() {
                   <TableHead>Imię i nazwisko</TableHead>
                   <TableHead>Email</TableHead>
                   <TableHead>Telefon</TableHead>
+                  <TableHead>Quiz</TableHead>
                   <TableHead>Szczegóły</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {leads.map((lead) => (
                   <TableRow key={lead.id}>
-                    <TableCell>{formatDate(lead.createdAt)}</TableCell>
+                    <TableCell>{formatDate(lead.submittedAt)}</TableCell>
                     <TableCell>{lead.name}</TableCell>
                     <TableCell>{lead.email}</TableCell>
                     <TableCell>{lead.phone || "-"}</TableCell>
+                    <TableCell>{lead.quizId || "Nieznany"}</TableCell>
                     <TableCell>
                       <details className="text-sm">
                         <summary className="cursor-pointer text-blue-600">
