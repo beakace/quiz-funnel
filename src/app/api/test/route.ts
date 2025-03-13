@@ -32,6 +32,10 @@ export async function GET() {
     const optionCount = await prisma.option.count();
     const userCount = await prisma.user.count();
 
+    // Get database connection details
+    const dbInfo =
+      await prisma.$queryRaw`SELECT current_database(), current_user, version()`;
+
     return NextResponse.json({
       success: true,
       message: "Database connection successful",
@@ -42,6 +46,13 @@ export async function GET() {
         options: optionCount,
         users: userCount,
       },
+      database: dbInfo,
+      databaseUrl: process.env.DATABASE_URL
+        ? process.env.DATABASE_URL.replace(
+            /\/\/([^:]+):[^@]+@/,
+            "//***:***@"
+          ).replace(/\?.*$/, "?...") // Hide credentials and query params
+        : "Not configured",
       environment: process.env.NODE_ENV || "unknown",
       timestamp: new Date().toISOString(),
     });

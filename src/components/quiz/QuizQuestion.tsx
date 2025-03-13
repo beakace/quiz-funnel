@@ -1,6 +1,7 @@
 import { QuizQuestion as QuizQuestionType } from "@/lib/types";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 interface QuizQuestionProps {
   question: QuizQuestionType;
@@ -24,10 +25,17 @@ export function QuizQuestion({
             <Button
               key={option.id}
               variant={selectedAnswer === option.id ? "default" : "outline"}
-              className="w-full justify-start text-left h-auto py-6 px-4"
+              className={cn(
+                "w-full justify-start text-left h-auto py-4 px-4 whitespace-normal",
+                "transition-all duration-200",
+                selectedAnswer === option.id
+                  ? "scale-[1.02] shadow-md"
+                  : "hover:scale-[1.01] hover:shadow-sm hover:border-primary/50",
+                "md:py-6"
+              )}
               onClick={() => onAnswer(question.id, option.id)}
             >
-              {option.text}
+              <span className="break-words">{option.text}</span>
             </Button>
           ))}
         </div>
