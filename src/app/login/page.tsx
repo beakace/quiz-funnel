@@ -31,7 +31,8 @@ export default function LoginPage() {
 
       router.push("/dashboard");
       router.refresh();
-    } catch (error) {
+    } catch {
+      // No parameter needed
       setError("An error occurred. Please try again.");
       setLoading(false);
     }

@@ -12,13 +12,23 @@ async function main() {
     process.exit(1);
   }
 
+  console.log("\n🔐 ADMIN USER SETUP 🔐");
+  console.log("====================");
+  console.log(`Email: ${email}`);
+  console.log(
+    `Password: ${password.substring(0, 2)}${"*".repeat(
+      password.length - 4
+    )}${password.substring(password.length - 2)}`
+  );
+  console.log("====================\n");
+
   try {
     // Check database connection first
     try {
       await prisma.$queryRaw`SELECT 1`;
-      console.log("Database connection successful");
+      console.log("✅ Database connection successful");
     } catch (error) {
-      console.error("Database connection failed:", error);
+      console.error("❌ Database connection failed:", error);
       process.exit(1);
     }
 
@@ -29,7 +39,7 @@ async function main() {
 
     if (existingUser) {
       console.log(
-        `User with email ${email} already exists. Updating password...`
+        `👤 User with email ${email} already exists. Updating password...`
       );
 
       const hashedPassword = await bcrypt.hash(password, 10);
@@ -41,7 +51,19 @@ async function main() {
         },
       });
 
-      console.log("Password updated successfully!");
+      console.log("✅ Password updated successfully!");
+
+      // Log the admin credentials for deployment
+      if (process.env.NODE_ENV === "production") {
+        console.log("\n🚀 DEPLOYMENT: ADMIN CREDENTIALS UPDATED 🚀");
+        console.log(`Email: ${email}`);
+        console.log(
+          `Password: ${password.substring(0, 2)}${"*".repeat(
+            password.length - 4
+          )}${password.substring(password.length - 2)}`
+        );
+        console.log("Save these credentials securely!\n");
+      }
     } else {
       // Create new user
       const hashedPassword = await bcrypt.hash(password, 10);
@@ -55,10 +77,22 @@ async function main() {
         },
       });
 
-      console.log(`Admin user created successfully with ID: ${user.id}`);
+      console.log(`✅ Admin user created successfully with ID: ${user.id}`);
+
+      // Log the admin credentials for deployment
+      if (process.env.NODE_ENV === "production") {
+        console.log("\n🚀 DEPLOYMENT: NEW ADMIN CREATED 🚀");
+        console.log(`Email: ${email}`);
+        console.log(
+          `Password: ${password.substring(0, 2)}${"*".repeat(
+            password.length - 4
+          )}${password.substring(password.length - 2)}`
+        );
+        console.log("Save these credentials securely!\n");
+      }
     }
   } catch (error) {
-    console.error("Error creating/updating admin user:", error);
+    console.error("❌ Error creating/updating admin user:", error);
     process.exit(1);
   } finally {
     await prisma.$disconnect();
