@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { useSession, signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 export default function DashboardLayout({
   children,
@@ -12,6 +13,30 @@ export default function DashboardLayout({
 }) {
   const { data: session } = useSession();
   const router = useRouter();
+  const [leadCount, setLeadCount] = useState(0);
+
+  // Fetch lead count from API
+  useEffect(() => {
+    async function fetchLeadCount() {
+      try {
+        const response = await fetch("/api/leads");
+        if (response.ok) {
+          const leads = await response.json();
+          setLeadCount(leads.length);
+        }
+      } catch (error) {
+        console.error("Error fetching lead count:", error);
+      }
+    }
+
+    fetchLeadCount();
+
+    // Set up polling to refresh lead count every 30 seconds
+    const intervalId = setInterval(fetchLeadCount, 30000);
+
+    // Clean up interval on component unmount
+    return () => clearInterval(intervalId);
+  }, []);
 
   const handleSignOut = async () => {
     await signOut({ redirect: false });
@@ -47,13 +72,7 @@ export default function DashboardLayout({
             <Button variant="ghost">Podsumowanie</Button>
           </Link>
           <Link href="/dashboard/leads">
-            <Button variant="ghost">
-              Leady (
-              {typeof window !== "undefined"
-                ? JSON.parse(localStorage.getItem("quiz_leads") || "[]").length
-                : 0}
-              )
-            </Button>
+            <Button variant="ghost">Leady ({leadCount})</Button>
           </Link>
         </div>
 

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { SessionProvider } from "@/components/SessionProvider";
+import Navbar from "@/components/Navbar";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -53,7 +54,10 @@ export default function RootLayout({
         <link rel="apple-touch-icon" href="/apple-touch-icon.svg" />
       </head>
       <body className={`${inter.variable} font-sans antialiased`}>
-        <SessionProvider>{children}</SessionProvider>
+        <SessionProvider>
+          <Navbar />
+          <div className="pt-20">{children}</div>
+        </SessionProvider>
       </body>
     </html>
   );

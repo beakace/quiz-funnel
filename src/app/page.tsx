@@ -5,10 +5,12 @@ export default function Home() {
   return (
     <main className="min-h-screen bg-background">
       {/* Hero Section */}
-      <div className="bg-white relative overflow-hidden">
-        {/* Decorative elements */}
-        <div className="absolute top-0 left-0 w-64 h-64 bg-primary/5 rounded-full -translate-x-1/2 -translate-y-1/2"></div>
-        <div className="absolute bottom-0 right-0 w-96 h-96 bg-secondary/5 rounded-full translate-x-1/3 translate-y-1/3"></div>
+      <div className="bg-white relative overflow-visible">
+        {/* Decorative elements - enhanced to overflow more */}
+        <div className="absolute top-0 left-0 w-96 h-96 bg-primary/5 rounded-full -translate-x-1/3 -translate-y-1/3 z-0"></div>
+        <div className="absolute bottom-0 right-0 w-[30rem] h-[30rem] bg-secondary/5 rounded-full translate-x-1/4 translate-y-1/4 z-0"></div>
+        <div className="absolute top-1/3 right-1/4 w-64 h-64 bg-orange-100/5 rounded-full z-0"></div>
+        <div className="absolute bottom-1/4 left-1/3 w-48 h-48 bg-yellow-100/5 rounded-full z-0"></div>
 
         <div className="container mx-auto px-4 relative z-10">
           <div className="flex flex-col md:flex-row items-center justify-between py-20 gap-12">
@@ -42,8 +44,12 @@ export default function Home() {
       </div>
 
       {/* Main Content */}
-      <div className="container mx-auto px-4 py-16">
-        <div className="max-w-4xl mx-auto">
+      <div className="container mx-auto px-4 py-16 relative">
+        {/* Additional decorative elements for the content section */}
+        <div className="absolute -top-24 -left-24 w-48 h-48 bg-orange-100/10 rounded-full z-0"></div>
+        <div className="absolute -bottom-24 -right-24 w-64 h-64 bg-yellow-100/15 rounded-full z-0"></div>
+
+        <div className="max-w-4xl mx-auto relative z-10">
           <h2 className="text-3xl font-bold text-center mb-12 text-[#3D3D3D]">
             Jak Możemy Ci Pomóc?
           </h2>

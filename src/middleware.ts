@@ -13,6 +13,14 @@ export async function middleware(request: NextRequest) {
     path.startsWith("/api/") ||
     path.includes(".");
 
+  // Check if we're in development mode
+  const isDevelopment = process.env.NODE_ENV === "development";
+
+  // Skip authentication in development mode
+  if (isDevelopment && path.startsWith("/dashboard")) {
+    return NextResponse.next();
+  }
+
   // Get the session token
   const token = await getToken({
     req: request,
