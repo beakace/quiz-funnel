@@ -1,13 +1,30 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { rentalQuiz } from "@/lib/quiz-data";
 import { QuizResult } from "@/lib/types";
 
-export default function ResultPage() {
+// Loading component to show while waiting for the result
+function ResultLoading() {
+  return (
+    <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <Card className="w-full max-w-3xl mx-auto overflow-hidden">
+        <div className="bg-primary h-2 w-full"></div>
+        <CardHeader className="text-center">
+          <CardTitle className="text-3xl font-bold text-center text-primary">
+            Ładowanie wyników...
+          </CardTitle>
+        </CardHeader>
+      </Card>
+    </div>
+  );
+}
+
+// Component that uses useSearchParams
+function ResultContent() {
   const searchParams = useSearchParams();
   const resultId = searchParams.get("id");
   const [result, setResult] = useState<QuizResult | null>(null);
@@ -22,18 +39,7 @@ export default function ResultPage() {
   }, [resultId]);
 
   if (!result) {
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <Card className="w-full max-w-3xl mx-auto overflow-hidden">
-          <div className="bg-primary h-2 w-full"></div>
-          <CardHeader className="text-center">
-            <CardTitle className="text-3xl font-bold text-center text-primary">
-              Ładowanie wyników...
-            </CardTitle>
-          </CardHeader>
-        </Card>
-      </div>
-    );
+    return <ResultLoading />;
   }
 
   return (
@@ -118,5 +124,14 @@ export default function ResultPage() {
         </Card>
       </div>
     </div>
+  );
+}
+
+// Main component with Suspense boundary
+export default function ResultPage() {
+  return (
+    <Suspense fallback={<ResultLoading />}>
+      <ResultContent />
+    </Suspense>
   );
 }
