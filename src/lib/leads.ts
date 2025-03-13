@@ -10,6 +10,9 @@ export interface Lead {
   quizId?: string;
   answers: Record<string, string>;
   submittedAt: string;
+  score?: number;
+  resultId?: string;
+  sendResultsViaEmail?: boolean;
 }
 
 // Define the structure of API lead data
@@ -20,6 +23,9 @@ interface ApiLead {
   phone?: string;
   quizId?: string;
   createdAt: string;
+  score?: number;
+  resultId?: string;
+  sendResultsViaEmail?: boolean;
   answers: Array<{
     questionId: string;
     optionId: string;
@@ -30,7 +36,7 @@ interface ApiLead {
  * Save lead data to the API and localStorage as a fallback
  */
 export async function saveLead(
-  data: LeadFormData,
+  data: LeadFormData & { score?: number; resultId?: string | null },
   answers: QuizAnswers,
   quizId?: string
 ): Promise<Lead> {
@@ -55,6 +61,9 @@ export async function saveLead(
         phone: data.phone,
         quizId: quizId || data.quizId,
         answers: formattedAnswers,
+        score: data.score,
+        resultId: data.resultId,
+        sendResultsViaEmail: data.sendResultsViaEmail,
       }),
     });
 
@@ -82,7 +91,7 @@ export async function saveLead(
  * Helper function to save lead data to localStorage
  */
 function saveLeadToLocalStorage(
-  data: LeadFormData,
+  data: LeadFormData & { score?: number; resultId?: string | null },
   answers: QuizAnswers,
   quizId?: string
 ): Lead {
@@ -95,6 +104,9 @@ function saveLeadToLocalStorage(
     quizId: quizId || data.quizId,
     answers,
     submittedAt: new Date().toISOString(),
+    score: data.score,
+    resultId: data.resultId || undefined,
+    sendResultsViaEmail: data.sendResultsViaEmail,
   };
 
   // Get existing leads from localStorage
@@ -147,6 +159,9 @@ export async function getLeads(): Promise<Lead[]> {
         quizId: apiLead.quizId,
         answers: answersRecord,
         submittedAt: apiLead.createdAt,
+        score: apiLead.score,
+        resultId: apiLead.resultId,
+        sendResultsViaEmail: apiLead.sendResultsViaEmail,
       };
     });
 

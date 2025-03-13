@@ -4,14 +4,25 @@ export type QuizQuestion = {
   options: {
     id: string;
     text: string;
+    points: number;
   }[];
   category: string;
+};
+
+export type QuizResult = {
+  id: string;
+  title: string;
+  minScore: number;
+  maxScore: number;
+  description: string;
+  recommendations: string[];
 };
 
 export type QuizData = {
   id: string;
   title: string;
   questions: QuizQuestion[];
+  results: QuizResult[];
 };
 
 export type QuizAnswers = {
@@ -23,4 +34,5 @@ export type LeadFormData = {
   email: string;
   phone?: string;
   quizId?: string;
+  sendResultsViaEmail?: boolean;
 };
