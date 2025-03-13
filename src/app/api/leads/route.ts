@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { v4 as uuidv4 } from "uuid";
+import { sendResultsEmail } from "@/lib/email";
 
 // Define types for our in-memory storage
 interface InMemoryLead {
@@ -10,6 +11,8 @@ interface InMemoryLead {
   phone?: string;
   quizId: string;
   score?: number;
+  resultId?: string;
+  sendResultsViaEmail?: boolean;
   answers: Array<{
     questionId: string;
     optionId: string;
@@ -24,7 +27,16 @@ const inMemoryLeads: InMemoryLead[] = [];
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { name, email, phone, quizId, score, answers } = body;
+    const {
+      name,
+      email,
+      phone,
+      quizId,
+      score,
+      resultId,
+      sendResultsViaEmail,
+      answers,
+    } = body;
 
     // Validate required fields
     if (!name || !email || !quizId) {
@@ -80,6 +92,7 @@ export async function POST(request: Request) {
             phone,
             quizId,
             score,
+            resultId,
           },
         });
 
@@ -110,6 +123,40 @@ export async function POST(request: Request) {
           },
         });
 
+        // Send email with quiz results if requested
+        if (sendResultsViaEmail && email) {
+          try {
+            // Prepare lead data for email sending
+            const leadForEmail = {
+              id: lead.id,
+              name,
+              email,
+              phone,
+              quizId,
+              answers: answers.reduce(
+                (
+                  acc: Record<string, string>,
+                  answer: { questionId: string; optionId: string }
+                ) => {
+                  acc[answer.questionId] = answer.optionId;
+                  return acc;
+                },
+                {}
+              ),
+              submittedAt: new Date().toISOString(),
+              score,
+              resultId,
+              sendResultsViaEmail,
+            };
+
+            await sendResultsEmail(leadForEmail);
+            console.log(`Results email sent to ${email}`);
+          } catch (emailError) {
+            console.error("Error sending results email:", emailError);
+            // Continue even if email sending fails
+          }
+        }
+
         return NextResponse.json(
           { success: true, lead: leadWithAnswers },
           { status: 201 }
@@ -129,12 +176,51 @@ export async function POST(request: Request) {
         phone,
         quizId,
         score,
+        resultId,
+        sendResultsViaEmail,
         answers: answers || [],
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
       };
 
       inMemoryLeads.push(newLead);
+
+      // Send email with quiz results if requested (in-memory fallback)
+      if (sendResultsViaEmail && email) {
+        try {
+          // Prepare lead data for email sending
+          const leadForEmail = {
+            id: newLead.id,
+            name,
+            email,
+            phone,
+            quizId,
+            answers: answers.reduce(
+              (
+                acc: Record<string, string>,
+                answer: { questionId: string; optionId: string }
+              ) => {
+                acc[answer.questionId] = answer.optionId;
+                return acc;
+              },
+              {}
+            ),
+            submittedAt: new Date().toISOString(),
+            score,
+            resultId,
+            sendResultsViaEmail,
+          };
+
+          await sendResultsEmail(leadForEmail);
+          console.log(`Results email sent to ${email} (in-memory fallback)`);
+        } catch (emailError) {
+          console.error(
+            "Error sending results email (in-memory fallback):",
+            emailError
+          );
+          // Continue even if email sending fails
+        }
+      }
 
       return NextResponse.json(
         { success: true, lead: newLead, storage: "in-memory" },

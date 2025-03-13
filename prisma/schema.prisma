@@ -143,16 +143,17 @@ model Result {
 }
 
 model Lead {
-  id          String   @id @default(cuid())
-  quizId      String
-  name        String
-  email       String
-  phone       String?
-  score       Int?
-  resultId    String?
-  answers     Answer[]
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id                 String   @id @default(cuid())
+  quizId             String
+  name               String
+  email              String
+  phone              String?
+  score              Int?
+  resultId           String?
+  sendResultsViaEmail Boolean? @default(true)
+  answers            Answer[]
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
 
   quiz        Quiz     @relation(fields: [quizId], references: [id], onDelete: Cascade)
 }
