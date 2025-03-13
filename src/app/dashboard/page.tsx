@@ -6,20 +6,35 @@ import { getLeads, Lead } from "@/lib/leads";
 
 export default function DashboardPage() {
   const [leads, setLeads] = useState<Lead[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    setLeads(getLeads());
+    async function fetchLeads() {
+      try {
+        setIsLoading(true);
+        const fetchedLeads = await getLeads();
+        setLeads(fetchedLeads);
+      } catch (error) {
+        console.error("Error fetching leads:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+
+    fetchLeads();
   }, []);
 
   // Calculate statistics
   const totalLeads = leads.length;
   const lastWeekLeads = leads.filter(
     (lead) =>
-      new Date(lead.createdAt) > new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
+      new Date(lead.submittedAt) >
+      new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
   ).length;
   const lastMonthLeads = leads.filter(
     (lead) =>
-      new Date(lead.createdAt) > new Date(Date.now() - 30 * 24 * 60 * 60 * 1000)
+      new Date(lead.submittedAt) >
+      new Date(Date.now() - 30 * 24 * 60 * 60 * 1000)
   ).length;
 
   return (
@@ -32,7 +47,9 @@ export default function DashboardPage() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{totalLeads}</div>
+            <div className="text-2xl font-bold">
+              {isLoading ? "..." : totalLeads}
+            </div>
           </CardContent>
         </Card>
         <Card>
@@ -42,7 +59,9 @@ export default function DashboardPage() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{lastWeekLeads}</div>
+            <div className="text-2xl font-bold">
+              {isLoading ? "..." : lastWeekLeads}
+            </div>
           </CardContent>
         </Card>
         <Card>
@@ -52,7 +71,9 @@ export default function DashboardPage() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{lastMonthLeads}</div>
+            <div className="text-2xl font-bold">
+              {isLoading ? "..." : lastMonthLeads}
+            </div>
           </CardContent>
         </Card>
       </div>
