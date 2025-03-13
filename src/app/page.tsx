@@ -1,6 +1,5 @@
-import Link from "next/link";
 import Image from "next/image";
-import { Button } from "@/components/ui/button";
+import { AnimatedButton } from "@/components/ui/animated-button";
 
 export default function Home() {
   return (
@@ -24,14 +23,9 @@ export default function Home() {
                 Dowiedz się, jak zwiększyć zyski i zautomatyzować zarządzanie
                 swoją nieruchomością
               </p>
-              <Link href="/quiz/rental-optimization">
-                <Button
-                  size="lg"
-                  className="text-lg px-10 py-6 bg-primary text-white hover:bg-primary/90 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300"
-                >
-                  Rozpocznij Quiz
-                </Button>
-              </Link>
+              <AnimatedButton href="/quiz/rental-optimization">
+                Rozpocznij Quiz
+              </AnimatedButton>
             </div>
             <div className="relative w-72 h-72 md:w-96 md:h-96 flex-shrink-0">
               <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-secondary/20 rounded-2xl transform rotate-6"></div>
@@ -81,14 +75,9 @@ export default function Home() {
           </div>
 
           <div className="text-center mt-12">
-            <Link href="/quiz/rental-optimization">
-              <Button
-                size="lg"
-                className="text-lg bg-primary text-white hover:bg-primary/90"
-              >
-                Rozpocznij Quiz
-              </Button>
-            </Link>
+            <AnimatedButton href="/quiz/rental-optimization">
+              Rozpocznij Quiz
+            </AnimatedButton>
           </div>
         </div>
       </div>

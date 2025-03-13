@@ -66,10 +66,29 @@ const config: Config = {
           from: { height: "var(--radix-accordion-content-height)" },
           to: { height: "0" },
         },
+        "spin-slow": {
+          to: { transform: "rotate(360deg)" },
+        },
+        "sparkle-1": {
+          "0%, 34%, 71%, 100%": { transform: "scale(1)" },
+          "17%": { transform: "scale(1.2)" },
+        },
+        "sparkle-2": {
+          "0%, 34%, 71%, 100%": { transform: "scale(1)" },
+          "49%": { transform: "scale(1.2)" },
+        },
+        "sparkle-3": {
+          "0%, 34%, 71%, 100%": { transform: "scale(1)" },
+          "83%": { transform: "scale(1.2)" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        "spin-slow": "spin-slow 2s linear infinite",
+        "sparkle-1": "sparkle-1 1.5s linear 0.5s infinite",
+        "sparkle-2": "sparkle-2 1.5s linear 0.5s infinite",
+        "sparkle-3": "sparkle-3 1.5s linear 0.5s infinite",
       },
     },
   },

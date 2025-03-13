@@ -1,0 +1,30 @@
+.border-animation-container {
+  position: relative;
+}
+
+.border-animation {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 9999px;
+  background: conic-gradient(
+    transparent 0deg,
+    transparent 30deg,
+    #fbaf30 60deg,
+    white 180deg,
+    #fbaf30 300deg,
+    transparent 330deg
+  );
+  animation: rotate 4s linear infinite;
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
