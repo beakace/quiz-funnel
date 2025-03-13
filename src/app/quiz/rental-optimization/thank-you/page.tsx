@@ -38,8 +38,8 @@ export default function ThankYouPage() {
             </div>
 
             <div className="flex justify-center pt-4">
-              <Link href="/dashboard">
-                <Button>Przejdź do panelu</Button>
+              <Link href="/">
+                <Button>Wróć na stronę główną</Button>
               </Link>
             </div>
           </CardContent>
